@@ -8,8 +8,6 @@ packages:
   - curl
   - gnupg
   - lsb-release
-  - nodejs
-  - npm
   - git
   - azure-cli
 
@@ -21,8 +19,8 @@ write_files:
       After=network.target
       
       [Service]
-      User=adminuser
-      WorkingDirectory=/home/adminuser/app
+      User=${vm_admin_username}
+      WorkingDirectory=/home/${vm_admin_username}/app/front-end/back
       ExecStart=/usr/bin/node dist/index.js
       Restart=always
       RestartSec=10
@@ -35,7 +33,7 @@ write_files:
       [Install]
       WantedBy=multi-user.target
   
-  - path: /home/adminuser/setup_app.sh
+  - path: /home/${vm_admin_username}/setup_app.sh
     permissions: '0755'
     content: |
       #!/bin/bash
@@ -47,7 +45,7 @@ write_files:
       JWT_SECRET=$(az keyvault secret show --name ${jwt_secret_name} --vault-name ${key_vault_name} --query value -o tsv)
       
       # Créer le fichier .env avec les secrets
-      cat > /home/adminuser/app/.env << EOF
+      cat > /home/${vm_admin_username}/app/.env << EOF
       PORT=${backend_port}
       NODE_ENV=production
       JWT_SECRET=$JWT_SECRET
@@ -58,10 +56,15 @@ write_files:
       sudo systemctl start ring-backend
 
 runcmd:
-  - mkdir -p /home/adminuser/app
-  - cd /home/adminuser/app
+  # Installation de Node.js v22.x
+  - curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+  - sudo apt-get install -y nodejs
+  - node --version
+  - npm --version
+  - mkdir -p /home/${vm_admin_username}/app
+  - cd /home/${vm_admin_username}/app
   - git clone https://github.com/user/ring-backend.git .
   - npm install
   - npm run build
-  - chown -R adminuser:adminuser /home/adminuser/app
-  - /home/adminuser/setup_app.sh
+  - chown -R ${vm_admin_username}:${vm_admin_username} /home/${vm_admin_username}/app
+  - /home/${vm_admin_username}/setup_app.sh

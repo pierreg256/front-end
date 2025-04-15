@@ -23,10 +23,11 @@ resource "azurerm_network_interface_backend_address_pool_association" "nic_lb_as
 # Template cloud-init pour le déploiement de l'application
 locals {
   cloud_init_config = templatefile("${path.module}/cloud-init.tpl", {
-    app_name        = var.app_name
-    backend_port    = var.backend_port
-    key_vault_name  = azurerm_key_vault.kv.name
-    jwt_secret_name = "jwt-secret"
+    app_name          = var.app_name
+    backend_port      = var.backend_port
+    key_vault_name    = azurerm_key_vault.kv.name
+    jwt_secret_name   = "jwt-secret"
+    vm_admin_username = var.vm_admin_username
   })
 }
 
