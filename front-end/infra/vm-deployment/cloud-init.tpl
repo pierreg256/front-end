@@ -63,7 +63,8 @@ runcmd:
   - npm --version
   - mkdir -p /home/${vm_admin_username}/app
   - cd /home/${vm_admin_username}/app
-  - git clone https://github.com/user/ring-backend.git .
+  - git clone https://github.com/pierreg256/ring-backend.git .
+  - cd /home/${vm_admin_username}/app/front-end/back
   - npm install
   - npm run build
   - chown -R ${vm_admin_username}:${vm_admin_username} /home/${vm_admin_username}/app
