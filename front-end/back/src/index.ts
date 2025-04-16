@@ -21,6 +21,13 @@ async function startServer() {
     })
   );
 
+  app.get("/", (req, res) => {
+    res.send("Hello World! This is the GraphQL server.");
+  });
+  app.get("/status/", (req, res) => {
+    res.send("Hello World! This is the GraphQL server.");
+  });
+
   // Create Apollo Server with schema and resolvers
   const apolloServer = new ApolloServer({
     typeDefs,

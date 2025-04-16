@@ -21,9 +21,28 @@ resource "azurerm_key_vault" "kv" {
   purge_protection_enabled   = false
   enable_rbac_authorization  = true
   tags                       = var.tags
+
+  # Configuration des règles d'accès réseau
+  network_acls {
+    default_action = "Deny" # Bloquer par défaut (recommandé pour sécurité)
+    bypass         = "AzureServices"
+    ip_rules       = [chomp(data.http.current_public_ip.response_body)] # IP dynamique du poste de travail
+    virtual_network_subnet_ids = [
+      azurerm_subnet.backend_subnet.id,
+      azurerm_subnet.bastion_subnet.id
+    ]
+  }
 }
 
 data "azurerm_client_config" "current" {}
+
+# Data source to get current public IP address
+data "http" "current_public_ip" {
+  url = "https://api.ipify.org"
+  request_headers = {
+    Accept = "text/plain"
+  }
+}
 
 # Attribution du rôle d'administrateur des secrets pour le pipeline de déploiement (CI/CD)
 resource "azurerm_role_assignment" "kv_admin" {

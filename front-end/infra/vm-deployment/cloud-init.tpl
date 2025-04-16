@@ -61,9 +61,11 @@ runcmd:
   - sudo apt-get install -y nodejs
   - node --version
   - npm --version
+  - curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+  - az --version
   - mkdir -p /home/${vm_admin_username}/app
   - cd /home/${vm_admin_username}/app
-  - git clone https://github.com/pierreg256/ring-backend.git .
+  - git clone https://github.com/pierreg256/front-end.git .
   - cd /home/${vm_admin_username}/app/front-end/back
   - npm install
   - npm run build

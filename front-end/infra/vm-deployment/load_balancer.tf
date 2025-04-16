@@ -21,7 +21,7 @@ resource "azurerm_lb_probe" "backend_probe" {
   loadbalancer_id     = azurerm_lb.backend_lb.id
   protocol            = "Http"
   port                = var.backend_port
-  request_path        = "/graphql"
+  request_path        = "/status"
   interval_in_seconds = 15
   number_of_probes    = 2
 }
