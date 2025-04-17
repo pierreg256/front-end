@@ -21,7 +21,7 @@ write_files:
       [Service]
       User=${vm_admin_username}
       WorkingDirectory=/home/${vm_admin_username}/app/front-end/back
-      ExecStart=/usr/bin/node dist/index.js
+      ExecStart=/usr/bin/node --env-file=/home/${vm_admin_username}/app/.env dist/index.js
       Restart=always
       RestartSec=10
       StandardOutput=syslog

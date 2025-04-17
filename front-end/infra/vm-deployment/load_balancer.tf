@@ -23,7 +23,7 @@ resource "azurerm_lb_probe" "backend_probe" {
   port                = var.backend_port
   request_path        = "/status"
   interval_in_seconds = 15
-  number_of_probes    = 2
+  number_of_probes    = 5
 }
 
 resource "azurerm_lb_rule" "backend_rule" {
